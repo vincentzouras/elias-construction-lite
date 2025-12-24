@@ -3,7 +3,9 @@
 
   /**
    * Apply .scrolled class to the body as the page is scrolled down
+   * Uses hysteresis (different thresholds) to prevent jittering
    */
+  let isScrolled = false;
   function toggleScrolled() {
     const selectBody = document.querySelector("body");
     const selectHeader = document.querySelector("#header");
@@ -13,7 +15,16 @@
       !selectHeader.classList.contains("fixed-top")
     )
       return;
-    window.scrollY > 100 ? selectBody.classList.add("scrolled") : selectBody.classList.remove("scrolled");
+
+    // Add scrolled class when scrolling past 150px
+    // Remove it only when scrolling back above 100px
+    if (window.scrollY > 70 && !isScrolled) {
+      selectBody.classList.add("scrolled");
+      isScrolled = true;
+    } else if (window.scrollY < 5 && isScrolled) {
+      selectBody.classList.remove("scrolled");
+      isScrolled = false;
+    }
   }
 
   document.addEventListener("scroll", toggleScrolled);
