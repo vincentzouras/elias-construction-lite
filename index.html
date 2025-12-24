@@ -50,14 +50,18 @@
       </div>
     </div><!-- End Top Bar -->
 
-    <div class="branding d-flex align-items-cente">
+    <div class="branding d-flex align-items-center">
 
       <div class="container position-relative d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
           <img src="assets/img/logo.svg" alt="">
-          <h1 class="sitename">Elias Construction</h1>
+          <div class="d-flex align-items-center gap-3">
+            <h1 class="sitename">Elias Construction</h1>
+            <span class="d-none d-md-block"
+              style="font-weight: 300; font-size: 1.2rem; white-space: nowrap; align-self: flex-end; margin-bottom: 6px;">West
+              Chester, PA</span>
+          </div>
         </a>
-
         <nav id="navmenu" class="navmenu">
           <ul>
             <li><a href="index.html" class="active">Home</a></li>
@@ -88,9 +92,9 @@
             <div class="hero-content" data-aos="fade-right" data-aos-delay="200">
               <span class="subtitle">Excellence in Construction</span>
               <h1>Full Service Remodeling</h1>
-              <p>Quality and honesty are at the heart of everything we do. Elias Construction is a professional
-                residential contractor and builder with over 28 years of experience in remodeling, additions, and custom
-                homes.</p>
+              <p>Quality and honesty are at the heart of everything we do. Elias Construction is an award-winning
+                professional residential contractor and builder with over 28 years of experience in remodeling,
+                additions, and custom homes.</p>
 
               <div class="hero-buttons">
                 <a href="contact.html" class="btn-primary">Request a Quote</a>
@@ -125,7 +129,9 @@
 
           <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
             <div class="hero-image">
-              <img src="assets/img/basements/IMG_0240.webp" alt="Construction Project" class="img-fluid">
+              <a href="assets/img/portfolio/IMG_0229.jpg" class="glightbox" data-gallery="portfolio">
+                <img src="assets/img/portfolio/IMG_0229.jpg" alt="Construction Project" class="img-fluid">
+              </a>
               <!-- <div class="image-badge">
                 <span>ISO 9001:2015</span>
                 <p>Certified Construction</p>
@@ -137,6 +143,29 @@
       </div>
 
     </section><!-- /Hero Section -->
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <a href="assets/img/portfolio/IMG_6746.jpg" class="glightbox" data-gallery="portfolio">
+              <img src="assets/img/portfolio/IMG_6746.jpg" alt="Project 1" class="img-fluid rounded">
+            </a>
+          </div>
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+            <a href="assets/img/portfolio/IMG_0240.webp" class="glightbox" data-gallery="portfolio">
+              <img src="assets/img/portfolio/IMG_0240.webp" alt="Project 2" class="img-fluid rounded">
+            </a>
+          </div>
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
+            <a href="assets/img/portfolio/IMG_5614.jpg" class="glightbox" data-gallery="portfolio">
+              <img src="assets/img/portfolio/IMG_5614.jpg" alt="Project 3" class="img-fluid rounded">
+            </a>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Portfolio Section -->
 
     <!-- About Section -->
     <section id="about" class="about section">
@@ -281,7 +310,7 @@
                     <i class="bi bi-rulers"></i>
                   </div>
                   <div class="service-list-content">
-                    <h4>Architectural Design</h4>
+                    <h4>Design</h4>
                     <p>Work with our design team to create a custom floor plan and exterior tailored to your lifestyle
                       and preferences.</p>
                   </div>
@@ -315,8 +344,7 @@
 
         <div class="cta-container text-center mt-5" data-aos="fade-up" data-aos-delay="300">
           <h3>Ready to Start Your Construction Project?</h3>
-          <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.</p> -->
-          <a href="#" class="btn btn-cta">Request a Free Quote</a>
+          <a href="contact.html" class="btn btn-cta">Request a Free Quote</a>
         </div>
 
       </div>
@@ -483,7 +511,6 @@
           <a href="index.html" class="logo d-flex align-items-center">
             <span class="sitename">Elias Construction</span>
           </a>
-          <p>Copyright &copy; 2025 </p>
           <p>Elias Zouras Custom Builder Inc (Lic. # PA012997) doing business as Elias Construction</p>
           <div class="social-links d-flex mt-4">
             <a href="https://twitter.com/eliasremodeling"><i class="bi bi-twitter-x"></i></a>
