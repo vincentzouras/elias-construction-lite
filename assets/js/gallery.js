@@ -41,8 +41,6 @@
     currentIndex = endIndex;
     isLoading = false;
 
-    console.log(`📸 Loaded ${loadedCount} images | Total so far: ${currentIndex}/${allImages.length}`);
-
     // Reinitialize GLightbox to include new images
     if (typeof GLightbox !== "undefined") {
       GLightbox({
@@ -67,9 +65,12 @@
     const galleryGrid = document.getElementById("gallery-grid");
     if (!galleryGrid) return;
 
-    // Flatten all images from all categories
+    // Get category filter from data attribute (for category pages)
+    const filterCategory = galleryGrid.getAttribute("data-category");
+
+    // Flatten all images from specified categories
     allImages = [];
-    const categories = ["basements", "kitchens", "bathrooms", "additions"];
+    const categories = filterCategory ? [filterCategory] : ["basements", "kitchens", "bathrooms", "additions"];
 
     categories.forEach((category) => {
       if (galleryImages[category]) {
@@ -81,8 +82,6 @@
         });
       }
     });
-
-    console.log(`🏗️ Gallery initialized with ${allImages.length} total images`);
 
     // Load initial batch
     currentIndex = 0;
