@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
   try {
     const result = await resend.emails.send({
-      from: "onboarding@resend.dev", // Test email (use your verified domain in production)
+      from: "notifications@vincentzouras.cfd", // Test email (use your verified domain in production)
       to: "vincentzouras@gmail.com", // Your business email
       replyTo: email, // Customer's email for replies
       subject: `New Project Inquiry from ${name}`,
