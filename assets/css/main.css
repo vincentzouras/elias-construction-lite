@@ -1038,9 +1038,9 @@ section,
 
 .about .about-image .image-overlay {
   position: absolute;
-  bottom: -80px;
+  bottom: -60px;
   right: -30px;
-  width: 40%;
+  width: 60%;
   z-index: 2;
   border-radius: 8px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
