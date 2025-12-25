@@ -129,7 +129,6 @@ const galleryImages = {
     "kitchen-additions-contractor-island-wine-cooler-chester-county-pa.webp",
     "kitchen-builder-center-island-granite-stained-wood-professional-pa.webp",
     "kitchen-remodeling-builder-windows-cabinets-floor-island-chester-county-pa.webp",
-    "kitchen-remodeling-cabinets-countertops-lighting-pa.webp",
     "kitchen-remodeling-contractor-cabinets-countertop-appliances-west-chester-pa.webp",
     "kitchen-remodeling-counters-flooring-appliances-pa.webp",
     "kitchen-remodeling-home-addition-west-chester-pennsylvania.webp",
