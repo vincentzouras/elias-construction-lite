@@ -66,7 +66,7 @@ Comprehensive SEO optimizations have been successfully implemented across the El
 - **Status:** ✅ Completed
 - **Implementation:**
   - Added to all 6 main pages
-  - Format: `<link rel="canonical" href="https://www.vincentzouras.cfd/[page]">`
+  - Format: `<link rel="canonical" href="https://vincentzouras.cfd/[page]">`
 - **Benefit:** Prevents duplicate content issues in search results
 
 ### 7. **Schema.org Structured Data (JSON-LD)**

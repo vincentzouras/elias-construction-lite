@@ -9,7 +9,7 @@ Disallow: /.env
 Disallow: /.vercel/
 
 # Sitemap location
-Sitemap: https://www.vincentzouras.cfd/sitemap.xml
+Sitemap: https://vincentzouras.cfd/sitemap.xml
 
 # Crawl delay (optional - helps prevent server overload)
 Crawl-delay: 1
