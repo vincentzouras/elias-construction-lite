@@ -88,6 +88,10 @@
     gtag('config', 'AW-958114346'); 
   </script>
 
+  <!-- Google reCAPTCHA v3 (replace with your site key) -->
+  <script async defer
+    src="https://www.google.com/recaptcha/api.js?render=6LeCS5gsAAAAAB3JCslJ1fPDQ-y0YDk50ue5u9NL"></script>
+
 </head>
 
 <body class="contact-page">
@@ -197,7 +201,7 @@
             <div class="form-container">
               <h3>Send Us a Message</h3>
 
-              <form id="contactForm" class="contact-form">
+              <form id="contactForm" class="contact-form" data-recaptcha-action="contact_form">
                 <div class="form-floating mb-3">
                   <input type="text" class="form-control" id="nameInput" name="name" placeholder="Full Name"
                     required="">
@@ -333,6 +337,40 @@
     const errorDiv = document.querySelector('.error-message');
     const sentDiv = document.querySelector('.sent-message');
 
+    function getRecaptchaSiteKey() {
+      const recaptchaScript = document.querySelector('script[src*="www.google.com/recaptcha/api.js"]');
+      if (!recaptchaScript || !recaptchaScript.src) return null;
+
+      try {
+        const url = new URL(recaptchaScript.src);
+        return url.searchParams.get('render');
+      } catch {
+        return null;
+      }
+    }
+
+    async function getRecaptchaToken() {
+      const siteKey = getRecaptchaSiteKey();
+      const action = contactForm?.dataset?.recaptchaAction || 'contact_form';
+
+      if (!siteKey || siteKey.includes('YOUR_RECAPTCHA_SITE_KEY')) {
+        throw new Error('reCAPTCHA site key is not configured.');
+      }
+
+      if (!window.grecaptcha || !window.grecaptcha.ready) {
+        throw new Error('reCAPTCHA failed to load. Please try again.');
+      }
+
+      return await new Promise((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(siteKey, { action })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+    }
+
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -349,6 +387,17 @@
         address: document.getElementById('addressInput').value,
         message: document.getElementById('messageInput').value
       };
+
+      formData.recaptchaAction = contactForm?.dataset?.recaptchaAction || 'contact_form';
+
+      try {
+        formData.recaptchaToken = await getRecaptchaToken();
+      } catch (error) {
+        loadingDiv.style.display = 'none';
+        errorDiv.textContent = error?.message || 'reCAPTCHA failed. Please try again.';
+        errorDiv.style.display = 'block';
+        return;
+      }
 
       try {
         const response = await fetch('/api/contact', {

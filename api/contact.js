@@ -2,12 +2,79 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+async function verifyRecaptcha({ token, expectedAction, remoteIp }) {
+  const secret = process.env.RECAPTCHA_SECRET_KEY || process.env.RECAPTCHA_ENTERPRISE_API_KEY;
+  if (!secret) {
+    return { ok: false, message: "Server is missing reCAPTCHA secret key." };
+  }
+
+  if (!token) {
+    return { ok: false, message: "Missing reCAPTCHA token." };
+  }
+
+  const body = new URLSearchParams({
+    secret,
+    response: token,
+  });
+  if (remoteIp) body.set("remoteip", remoteIp);
+
+  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body,
+  });
+
+  const data = await response.json();
+  if (!data?.success) {
+    return { ok: false, message: "reCAPTCHA verification failed." };
+  }
+
+  // reCAPTCHA v3 returns score + action; v2 typically does not.
+  if (typeof data.action === "string" && expectedAction && data.action !== expectedAction) {
+    return { ok: false, message: "reCAPTCHA action mismatch." };
+  }
+
+  if (typeof data.score === "number") {
+    const threshold = Number(process.env.RECAPTCHA_SCORE_THRESHOLD ?? 0.5);
+    if (Number.isFinite(threshold) && data.score < threshold) {
+      return { ok: false, message: "reCAPTCHA score too low." };
+    }
+  }
+
+  return { ok: true, data };
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, phone, address, message } = req.body;
+  const { name, email, phone, address, message, recaptchaToken, recaptchaAction } = req.body;
+
+  // Verify reCAPTCHA before doing any work that can be abused.
+  try {
+    const forwardedFor = req.headers["x-forwarded-for"];
+    const remoteIp = Array.isArray(forwardedFor)
+      ? forwardedFor[0]
+      : typeof forwardedFor === "string"
+        ? forwardedFor.split(",")[0]?.trim()
+        : undefined;
+
+    const verification = await verifyRecaptcha({
+      token: recaptchaToken,
+      expectedAction: recaptchaAction || "contact_form",
+      remoteIp,
+    });
+
+    if (!verification.ok) {
+      return res.status(400).send("reCAPTCHA verification failed. Please try again.");
+    }
+  } catch (error) {
+    console.error("reCAPTCHA error:", error);
+    return res.status(400).send("reCAPTCHA verification failed. Please try again.");
+  }
 
   // Validate inputs
   if (!name || !email || !phone || !address || !message) {
