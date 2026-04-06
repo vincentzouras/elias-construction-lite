@@ -11,12 +11,24 @@
     col.className = "col-lg-3 col-md-4 col-sm-6";
 
     const link = document.createElement("a");
+    // Link to original high-res image for glightbox
     link.href = `assets/img/${image.category}/${image.filename}`;
     link.className = "glightbox";
     link.setAttribute("data-gallery", "gallery");
 
+    // Get filename without extension for optimized versions
+    const nameWithoutExt = image.filename.replace(/\.[^/.]+$/, "");
+
     const img = document.createElement("img");
-    img.src = `assets/img/${image.category}/${image.filename}`;
+    // Use optimized 800w as default
+    img.src = `assets/img/optimized/${image.category}/${nameWithoutExt}-800w.webp`;
+    // Add srcset with all optimized widths
+    img.srcset = `assets/img/optimized/${image.category}/${nameWithoutExt}-400w.webp 400w,
+                  assets/img/optimized/${image.category}/${nameWithoutExt}-800w.webp 800w,
+                  assets/img/optimized/${image.category}/${nameWithoutExt}-1200w.webp 1200w,
+                  assets/img/optimized/${image.category}/${nameWithoutExt}-1600w.webp 1600w`;
+    // Add sizes for responsive behavior
+    img.sizes = "(max-width: 480px) 400px, (max-width: 768px) 600px, 400px";
     img.alt = `${image.category} project`;
     img.className = "img-fluid rounded";
     img.loading = "lazy";
