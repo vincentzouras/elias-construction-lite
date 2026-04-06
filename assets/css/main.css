@@ -704,7 +704,7 @@ section,
 }
 
 .section-title p {
-  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  color: var(--default-color);
   margin: 5px 0 0 0;
   font-size: 16px;
   font-weight: 500;
