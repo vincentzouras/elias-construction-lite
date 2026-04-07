@@ -65,6 +65,7 @@ const processFolder = async (folderPath) => {
                     const outputPath = path.join(categoryOutputFolder, outputFileName);
 
                     await sharp(inputPath)
+                        .rotate()
                         .resize(width, null, {
                             fit: 'inside'
                         })
