@@ -75,11 +75,8 @@
         <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     </noscript>
 
-    <!-- Main CSS File -->
-    <link href="/assets/css/main.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript>
-        <link href="/assets/css/main.css" rel="stylesheet">
-    </noscript>
+    <!-- Main CSS File (render-blocking to prevent styling flash) -->
+    <link href="/assets/css/main.css" rel="stylesheet">
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
