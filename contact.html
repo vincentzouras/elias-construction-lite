@@ -113,7 +113,21 @@
     gtag('config', 'G-LGT41DC5M8');
 
     // This connects your NEW Google Ads account
-    gtag('config', 'AW-18153873957'); 
+    gtag('config', 'AW-18153873957');
+
+    // Google Ads Conversion Tracking
+    function gtag_report_conversion(url) {
+      var callback = function () {
+        if (typeof (url) != 'undefined') {
+          window.location = url;
+        }
+      };
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18153873957/_wokCNWirKscEKXEuNBD',
+        'event_callback': callback
+      });
+      return false;
+    }
   </script>
 
   <!-- Google reCAPTCHA v3 -->
@@ -439,6 +453,8 @@
         loadingDiv.style.display = 'none';
 
         if (response.ok) {
+          // Report conversion to Google Ads
+          gtag_report_conversion();
           sentDiv.style.display = 'block';
           contactForm.reset();
         } else {
