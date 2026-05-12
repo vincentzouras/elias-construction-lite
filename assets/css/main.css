@@ -170,6 +170,11 @@ h6 {
   margin: 0;
   font-weight: 700;
   color: var(--heading-color);
+  white-space: nowrap;
+}
+
+.header .logo .d-flex {
+  gap: 0.5rem !important;
 }
 
 .scrolled .header {
