@@ -3,7 +3,9 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function verifyRecaptcha({ token, expectedAction, remoteIp }) {
-  const secret = process.env.RECAPTCHA_SECRET_KEY || process.env.RECAPTCHA_ENTERPRISE_API_KEY;
+  const secret =
+    process.env.RECAPTCHA_SECRET_KEY ||
+    process.env.RECAPTCHA_ENTERPRISE_API_KEY;
   if (!secret) {
     return { ok: false, message: "Server is missing reCAPTCHA secret key." };
   }
@@ -18,13 +20,16 @@ async function verifyRecaptcha({ token, expectedAction, remoteIp }) {
   });
   if (remoteIp) body.set("remoteip", remoteIp);
 
-  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
+  const response = await fetch(
+    "https://www.google.com/recaptcha/api/siteverify",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body,
     },
-    body,
-  });
+  );
 
   const data = await response.json();
   if (!data?.success) {
@@ -32,7 +37,11 @@ async function verifyRecaptcha({ token, expectedAction, remoteIp }) {
   }
 
   // reCAPTCHA v3 returns score + action; v2 typically does not.
-  if (typeof data.action === "string" && expectedAction && data.action !== expectedAction) {
+  if (
+    typeof data.action === "string" &&
+    expectedAction &&
+    data.action !== expectedAction
+  ) {
     return { ok: false, message: "reCAPTCHA action mismatch." };
   }
 
@@ -51,7 +60,15 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, email, phone, address, message, recaptchaToken, recaptchaAction } = req.body;
+  const {
+    name,
+    email,
+    phone,
+    address,
+    message,
+    recaptchaToken,
+    recaptchaAction,
+  } = req.body;
 
   // Verify reCAPTCHA before doing any work that can be abused.
   try {
@@ -69,11 +86,15 @@ export default async function handler(req, res) {
     });
 
     if (!verification.ok) {
-      return res.status(400).send("reCAPTCHA verification failed. Please try again.");
+      return res
+        .status(400)
+        .send("reCAPTCHA verification failed. Please try again.");
     }
   } catch (error) {
     console.error("reCAPTCHA error:", error);
-    return res.status(400).send("reCAPTCHA verification failed. Please try again.");
+    return res
+      .status(400)
+      .send("reCAPTCHA verification failed. Please try again.");
   }
 
   // Validate inputs
@@ -87,6 +108,10 @@ export default async function handler(req, res) {
     return res.status(400).send("Please provide a valid email address");
   }
 
+  // Generate Google Maps link for the address
+  const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(address)}`;
+  const mapsLink = `<a href="${mapsUrl}" target="_blank" style="color: #0066cc; text-decoration: none;">${address}</a>`;
+
   try {
     const result = await resend.emails.send({
       from: "projectinquiry@eliasremodel.com", // Test email (use your verified domain in production)
@@ -98,7 +123,7 @@ export default async function handler(req, res) {
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Home Address:</strong> ${address}</p>
+        <p><strong>Home Address:</strong> ${mapsLink}</p>
         <h3>Project Details:</h3>
         <p>${message.replace(/\n/g, "<br>")}</p>
       `,
@@ -106,10 +131,14 @@ export default async function handler(req, res) {
 
     if (result.error) {
       console.error("Resend error:", result.error);
-      return res.status(500).send("Error sending email. Please try again later.");
+      return res
+        .status(500)
+        .send("Error sending email. Please try again later.");
     }
 
-    res.status(200).json({ message: "Email sent successfully", id: result.data.id });
+    res
+      .status(200)
+      .json({ message: "Email sent successfully", id: result.data.id });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Error sending email. Please try again later.");

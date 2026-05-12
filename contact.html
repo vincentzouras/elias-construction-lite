@@ -134,6 +134,10 @@
   <script async defer
     src="https://www.google.com/recaptcha/api.js?render=6LeCS5gsAAAAAB3JCslJ1fPDQ-y0YDk50ue5u9NL"></script>
 
+  <!-- Google Places API -->
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TsIigFnKgv4LyMjzUMaMzFO0Ls1lptg&libraries=places"></script>
+
 </head>
 
 <body class="contact-page">
@@ -257,15 +261,17 @@
                 </div>
 
                 <div class="form-floating mb-3">
-                  <input type="tel" class="form-control" id="phoneInput" name="phone" placeholder="Phone Number"
-                    required="">
+                  <input type="tel" class="form-control" id="phoneInput" name="phone" placeholder="(555) 123-4567"
+                    required="" pattern="^[\d\s\-\(\)\+]+$" title="Please enter a valid phone number">
                   <label for="phoneInput">Phone Number</label>
+                  <small class="form-text text-muted d-block mt-1">Format: (XXX) XXX-XXXX</small>
                 </div>
 
                 <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="addressInput" name="address" placeholder="Home Address"
-                    required="">
+                  <input type="text" class="form-control" id="addressInput" name="address"
+                    placeholder="Start typing your address..." required="" autocomplete="off">
                   <label for="addressInput">Home Address</label>
+                  <small class="form-text text-muted d-block mt-1">We'll suggest addresses as you type</small>
                 </div>
 
                 <div class="form-floating mb-3">
@@ -378,6 +384,53 @@
     const loadingDiv = document.querySelector('.loading');
     const errorDiv = document.querySelector('.error-message');
     const sentDiv = document.querySelector('.sent-message');
+    let autocomplete;
+
+    // Initialize Google Places Autocomplete
+    function initAutocomplete() {
+      const addressInput = document.getElementById('addressInput');
+      autocomplete = new google.maps.places.Autocomplete(addressInput, {
+        types: ['geocode'],
+        componentRestrictions: { country: 'us' }
+      });
+      autocomplete.addListener('place_changed', onPlaceChanged);
+    }
+
+    function onPlaceChanged() {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) {
+        console.log('Place has no geometry');
+        return;
+      }
+      document.getElementById('addressInput').value = place.formatted_address;
+    }
+
+    // Phone number formatting
+    function formatPhoneNumber(value) {
+      const digits = value.replace(/\D/g, '');
+      if (digits.length === 0) return '';
+      if (digits.length <= 3) return `(${digits}`;
+      if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+      return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+    }
+
+    // Validate phone number
+    function isValidPhoneNumber(phone) {
+      const digits = phone.replace(/\D/g, '');
+      return digits.length === 10;
+    }
+
+    // Phone input event listener
+    document.getElementById('phoneInput').addEventListener('input', function (e) {
+      e.target.value = formatPhoneNumber(e.target.value);
+    });
+
+    // Initialize autocomplete when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAutocomplete);
+    } else {
+      initAutocomplete();
+    }
 
     function getRecaptchaSiteKey() {
       const recaptchaScript = document.querySelector('script[src*="www.google.com/recaptcha/api.js"]');
@@ -422,10 +475,19 @@
       errorDiv.textContent = '';
       sentDiv.style.display = 'none';
 
+      // Validate phone number
+      const phone = document.getElementById('phoneInput').value;
+      if (!isValidPhoneNumber(phone)) {
+        loadingDiv.style.display = 'none';
+        errorDiv.textContent = 'Please enter a valid phone number (10 digits required)';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
       const formData = {
         name: document.getElementById('nameInput').value,
         email: document.getElementById('emailInput').value,
-        phone: document.getElementById('phoneInput').value,
+        phone: phone,
         address: document.getElementById('addressInput').value,
         message: document.getElementById('messageInput').value
       };
