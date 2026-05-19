@@ -68,7 +68,13 @@ export default async function handler(req, res) {
     message,
     recaptchaToken,
     recaptchaAction,
+    website,
   } = req.body;
+
+  // Reject if honeypot field is filled (bot detection)
+  if (website) {
+    return res.status(400).send("Invalid submission.");
+  }
 
   // Verify reCAPTCHA before doing any work that can be abused.
   try {

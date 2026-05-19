@@ -272,6 +272,10 @@
                   <label for="addressInput">Home Address</label>
                 </div>
 
+                <!-- Honeypot field -->
+                <input type="text" id="websiteInput" name="website" style="display: none;" tabindex="-1"
+                  autocomplete="off">
+
                 <div class="form-floating mb-3">
                   <textarea class="form-control" id="messageInput" name="message" rows="5"
                     placeholder="Tell us about your project!" style="height: 150px" required=""></textarea>
@@ -479,6 +483,16 @@
         loadingDiv.style.display = 'none';
         errorDiv.textContent = 'Please enter a valid phone number (10 digits required)';
         errorDiv.style.display = 'block';
+        return;
+      }
+
+      // Check honeypot field
+      const honeypot = document.getElementById('websiteInput').value;
+      if (honeypot) {
+        // Silently fail for bots
+        loadingDiv.style.display = 'none';
+        sentDiv.style.display = 'block';
+        contactForm.reset();
         return;
       }
 
