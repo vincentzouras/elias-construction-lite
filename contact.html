@@ -136,7 +136,7 @@
 
   <!-- Google Places API -->
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TsIigFnKgv4LyMjzUMaMzFO0Ls1lptg&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TsIigFnKgv4LyMjzUMaMzFO0Ls1lptg&libraries=places&callback=initAutocomplete"></script>
 
 </head>
 
@@ -354,6 +354,9 @@
 
   </footer>
 
+  <!-- Contact Button -->
+  <a href="/contact.html" class="contact-button">Contact</a>
+
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"
     title="Scroll to top"><i class="bi bi-arrow-up-short"></i></a>
@@ -426,13 +429,6 @@
     document.getElementById('phoneInput').addEventListener('input', function (e) {
       e.target.value = formatPhoneNumber(e.target.value);
     });
-
-    // Initialize autocomplete when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initAutocomplete);
-    } else {
-      initAutocomplete();
-    }
 
     function getRecaptchaSiteKey() {
       const recaptchaScript = document.querySelector('script[src*="www.google.com/recaptcha/api.js"]');

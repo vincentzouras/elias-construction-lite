@@ -648,6 +648,49 @@ h6 {
   opacity: 1;
 }
 
+.contact-button {
+  position: fixed;
+  left: 15px;
+  bottom: 15px;
+  z-index: 99999;
+  background-color: #e36f1e;
+  color: #ffffff;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-weight: 600;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(227, 111, 30, 0.8), 0 0 40px rgba(227, 111, 30, 0.5);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.contact-button:hover {
+  background-color: #d15f0a;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(227, 111, 30, 0.4);
+}
+
+.contact-button.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+body.contact-page .contact-button {
+  display: none !important;
+}
+
+@media screen and (max-width: 768px) {
+  .contact-button {
+    display: flex;
+  }
+}
+
 /*--------------------------------------------------------------
 # Disable aos animation delay on mobile devices
 --------------------------------------------------------------*/
@@ -820,6 +863,14 @@ section,
 @media (max-width: 768px) {
   .hero .hero-content h1 {
     font-size: 32px;
+  }
+
+  .hero .row {
+    flex-direction: column-reverse;
+  }
+
+  .hero .hero-image {
+    margin-bottom: 30px;
   }
 }
 

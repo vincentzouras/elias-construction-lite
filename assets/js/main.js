@@ -81,10 +81,18 @@
    * Scroll top button
    */
   let scrollTop = document.querySelector(".scroll-top");
+  let contactButton = document.querySelector(".contact-button");
 
   function toggleScrollTop() {
     if (scrollTop) {
-      window.scrollY > 100 ? scrollTop.classList.add("active") : scrollTop.classList.remove("active");
+      window.scrollY > 100
+        ? scrollTop.classList.add("active")
+        : scrollTop.classList.remove("active");
+    }
+    if (contactButton) {
+      window.scrollY > 100
+        ? contactButton.classList.add("active")
+        : contactButton.classList.remove("active");
     }
   }
   scrollTop.addEventListener("click", (e) => {
@@ -116,7 +124,9 @@
    */
   function initSwiper() {
     document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
-      let config = JSON.parse(swiperElement.querySelector(".swiper-config").innerHTML.trim());
+      let config = JSON.parse(
+        swiperElement.querySelector(".swiper-config").innerHTML.trim(),
+      );
 
       if (swiperElement.classList.contains("swiper-tab")) {
         initSwiperWithCustomPagination(swiperElement, config);
