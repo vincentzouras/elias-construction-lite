@@ -134,8 +134,30 @@
   <script async defer
     src="https://www.google.com/recaptcha/api.js?render=6LeCS5gsAAAAAB3JCslJ1fPDQ-y0YDk50ue5u9NL"></script>
 
-  <!-- Google Places API -->
-  <script async defer
+  <!-- Google Places Autocomplete - define callback BEFORE API loads -->
+  <script>
+    let autocomplete;
+    function initAutocomplete() {
+      const addressInput = document.getElementById('addressInput');
+      if (!addressInput) return;
+      autocomplete = new google.maps.places.Autocomplete(addressInput, {
+        types: ['geocode'],
+        componentRestrictions: { country: 'us' }
+      });
+      autocomplete.addListener('place_changed', onPlaceChanged);
+    }
+    function onPlaceChanged() {
+      const place = autocomplete.getPlace();
+      if (!place.geometry) {
+        console.log('Place has no geometry');
+        return;
+      }
+      document.getElementById('addressInput').value = place.formatted_address;
+    }
+  </script>
+
+  <!-- Google Places API (defer only — no async, to avoid race with callback) -->
+  <script defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3TsIigFnKgv4LyMjzUMaMzFO0Ls1lptg&libraries=places&callback=initAutocomplete"></script>
 
 </head>
