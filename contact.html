@@ -411,27 +411,6 @@
     const loadingDiv = document.querySelector('.loading');
     const errorDiv = document.querySelector('.error-message');
     const sentDiv = document.querySelector('.sent-message');
-    let autocomplete;
-
-    // Initialize Google Places Autocomplete
-    function initAutocomplete() {
-      const addressInput = document.getElementById('addressInput');
-      autocomplete = new google.maps.places.Autocomplete(addressInput, {
-        types: ['geocode'],
-        componentRestrictions: { country: 'us' }
-      });
-      autocomplete.addListener('place_changed', onPlaceChanged);
-    }
-
-    function onPlaceChanged() {
-      const place = autocomplete.getPlace();
-      if (!place.geometry) {
-        console.log('Place has no geometry');
-        return;
-      }
-      document.getElementById('addressInput').value = place.formatted_address;
-    }
-
     // Phone number formatting
     function formatPhoneNumber(value) {
       const digits = value.replace(/\D/g, '');
@@ -448,8 +427,11 @@
     }
 
     // Phone input event listener
-    document.getElementById('phoneInput').addEventListener('input', function (e) {
+    const phoneInput = document.getElementById('phoneInput');
+    phoneInput.addEventListener('input', function (e) {
       e.target.value = formatPhoneNumber(e.target.value);
+      // Clear custom validity as user types
+      e.target.setCustomValidity('');
     });
 
     function getRecaptchaSiteKey() {
@@ -495,12 +477,12 @@
       errorDiv.textContent = '';
       sentDiv.style.display = 'none';
 
-      // Validate phone number
-      const phone = document.getElementById('phoneInput').value;
+      // Validate phone number (uses native browser validation tooltip)
+      const phone = phoneInput.value;
       if (!isValidPhoneNumber(phone)) {
         loadingDiv.style.display = 'none';
-        errorDiv.textContent = 'Please enter a valid phone number (10 digits required)';
-        errorDiv.style.display = 'block';
+        phoneInput.setCustomValidity('Please enter a valid phone number (10 digits required)');
+        phoneInput.reportValidity();
         return;
       }
 
