@@ -4353,7 +4353,7 @@ section,
 }
 
 .contact .form-container .form-floating label::after {
-  background-color: transparent;
+  background-color: var(--surface-color) !important;
 }
 
 .contact .form-container .btn-submit {
